@@ -3,8 +3,10 @@
 
 Server::Server()
 {
-    if(this->listen(QHostAddress::Any,12))
+    if(this->listen(QHostAddress::Any,22))
         qDebug() << "Listening port is "<< this->serverPort();
+    else
+        qDebug() << "some problems" << this->serverError() << this->errorString();
 }
 
 void Server::sendToClient(QString mes)
@@ -13,7 +15,10 @@ void Server::sendToClient(QString mes)
     QDataStream out(&data, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_6_3);
     out << mes;
-    socket->write(data);
+    for (auto item : socket_vector)
+    {
+        item->write(data);
+    }
 
 }
 
@@ -28,6 +33,7 @@ void Server::slotReadyRead()
         QString str ;
         in >> str;
         qDebug() << str;
+        sendToClient(str);
     }
     else
     {
