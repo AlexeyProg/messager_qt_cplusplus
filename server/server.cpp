@@ -1,12 +1,16 @@
 #include "server.h"
 #include <QDebug>
+#include <QCoreApplication>
 
 Server::Server()
 {
-    if(this->listen(QHostAddress::Any,22))
+    if(this->listen(QHostAddress::Any,77))
         qDebug() << "Listening port is "<< this->serverPort();
     else
         qDebug() << "some problems" << this->serverError() << this->errorString();
+
+    QCoreApplication::instance()->connect(QCoreApplication::instance(),SIGNAL(aboutToQuit()), this,
+                                          SLOT(closeApp()));
 }
 
 void Server::sendToClient(QString mes)
@@ -21,6 +25,7 @@ void Server::sendToClient(QString mes)
     }
 
 }
+
 
 void Server::slotReadyRead()
 {
@@ -51,4 +56,9 @@ void Server::incommingConnection(qintptr socketDescriptor)
 
     socket_vector.push_back(socket);
     qDebug() << "New client!" << " Descriptor is " << socketDescriptor;
+}
+
+void Server::closeApp()
+{
+    this->close();
 }

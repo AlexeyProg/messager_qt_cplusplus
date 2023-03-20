@@ -12,6 +12,7 @@ class Server : public QTcpServer
 public:
     Server();
 
+
 private:
     QTcpSocket *socket;
     QByteArray data;
@@ -20,6 +21,7 @@ private:
 public slots:
     void slotReadyRead();
     void incommingConnection(qintptr socketDescriptor);
+    void closeApp();
 };
 
 #endif // SERVER_H
