@@ -7,6 +7,8 @@
 #include <QByteArray>
 #include <QVector>
 #include <QDataStream>
+#include <QTime>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,9 +26,16 @@ public:
     void sendToServer(QString msg);
     QVector<QTcpSocket*> socket_vector;
 
+
+
+    //static int user_id;
+
 public slots:
     void slotReadyRead();
     void connectToServer();
+
+private:
+    QString userName;
 
 
 

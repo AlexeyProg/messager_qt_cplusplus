@@ -2,12 +2,13 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    this->setWindowTitle("Messager");
     socket = new QTcpSocket(this);
     connect(socket, SIGNAL(readyRead()), SLOT(slotReadyRead()));
     connect(socket, SIGNAL(disconnected()), SLOT(deleteLater()));
@@ -24,7 +25,10 @@ void MainWindow::sendToServer(QString msg)
 {
     data.clear();
     QDataStream out(&data, QIODevice::WriteOnly);
-    out << msg;
+    QString current_time = QTime::currentTime().toString();
+    QString full_message = current_time + "(" + ") : " + msg;
+    out << full_message;
+    qDebug() << current_time << "("<< userName << ") : " << msg;
     socket->write(data);
 }
 
@@ -47,14 +51,23 @@ void MainWindow::slotReadyRead()
 
 void MainWindow::connectToServer()
 {
-    socket->connectToHost("127.0.0.1", 1234);
-    if(socket->waitForConnected(5000))
+    if(ui->lineEdit_nickname->text().isEmpty())
     {
-        ui->textBrowser->append("CONNECTED...");
+        QMessageBox::warning(this,"Login error","You need to login! Maybe your nickname field is empty");
+        return;
     }
     else
     {
-        ui->textBrowser->append("Connection error");
+        userName = ui->lineEdit_nickname->text();
+        socket->connectToHost("127.0.0.1", 1234);
+        if(socket->waitForConnected(5000))
+        {
+            ui->textBrowser->append(QString(userName + " connected to chat"));
+        }
+        else
+        {
+            ui->textBrowser->append("Connection error");
+        }
     }
 }
 

@@ -44,5 +44,5 @@ void Servak::incomingConnection(qintptr handle)
     connect(socket, SIGNAL(readyRead()), SLOT(slotReadyRead()));
     connect(socket, SIGNAL(disconnected()), SLOT(deleteLater()));
     vector_socket.push_back(socket);
-    qDebug() << " New connection ";
+    qDebug() << " New connection! Socket Descriptor is " << handle;
 }
