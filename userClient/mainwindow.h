@@ -2,13 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QTcpSocket>
-#include <QHostAddress>
-#include <QByteArray>
-#include <QVector>
-#include <QDataStream>
-#include <QTime>
 #include <QMessageBox>
+#include "chatdialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -21,28 +16,16 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    QByteArray data;
-    QTcpSocket *socket;
-    void sendToServer(QString msg);
-    QVector<QTcpSocket*> socket_vector;
 
-
-
-    //static int user_id;
+    void openChat_login(QString nickname);
 
 public slots:
-    void slotReadyRead();
-    void connectToServer();
 
-private:
-    QString userName;
+    void press_login();
 
-
-
-private slots:
-    void on_pushButton_send_clicked();
 
 private:
     Ui::MainWindow *ui;
+    ChatDialog *chat ;
 };
 #endif // MAINWINDOW_H
