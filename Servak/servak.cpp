@@ -13,7 +13,7 @@ void Servak::sendToUser(QString message)
     data.clear();
     QDataStream out(&data, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_6_2);
-    out << message;
+    out << message << userName;
     for(QTcpSocket* item : vector_socket)
     {
         item->write(data);
@@ -27,10 +27,9 @@ void Servak::slotReadyRead()
     in.setVersion(QDataStream::Qt_6_2);
     if(in.status() == QDataStream::Ok)
     {
-        QString str;
-        in >> str;
-        qDebug() << str;
-        sendToUser(str);
+        QString message;
+        in >> message >> userName;
+        sendToUser(message);
     }
     else
         qDebug() << "datastream error";
@@ -40,9 +39,23 @@ void Servak::slotReadyRead()
 void Servak::incomingConnection(qintptr handle)
 {
     socket = new QTcpSocket;
-    socket->setSocketDescriptor(handle);
-    connect(socket, SIGNAL(readyRead()), SLOT(slotReadyRead()));
-    connect(socket, SIGNAL(disconnected()), SLOT(deleteLater()));
-    vector_socket.push_back(socket);
-    qDebug() << " New connection! Socket Descriptor is " << handle;
+    if(socket->setSocketDescriptor(handle))
+    {
+        connect(socket, SIGNAL(readyRead()), SLOT(slotReadyRead()));
+        connect(socket, SIGNAL(disconnected()), SLOT(slotDisconnected()));
+        vector_socket.push_back(socket);
+        qDebug() << " New connection! Socket Descriptor is " << handle;
+//        QString user = socket->property("username").toString();
+    }
+    else
+        delete socket;
 }
+
+void Servak::slotDisconnected()
+{
+    QTcpSocket* socket = (QTcpSocket*)sender();
+    socket->deleteLater();
+    vector_socket.removeOne(socket);
+    qDebug() << "Client disconnected. Socket descriptor: " << socket->socketDescriptor();
+}
+

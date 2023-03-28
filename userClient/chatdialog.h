@@ -38,8 +38,8 @@ private slots:
 
 private:
     QString userName;
+    QByteArray nickData;
 
-private:
     Ui::ChatDialog *ui;
 };
 

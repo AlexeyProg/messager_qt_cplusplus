@@ -9,7 +9,7 @@ ChatDialog::ChatDialog(QString nickname, QWidget *parent) :
     this->setWindowTitle("Messager");
     userName = nickname;
     socket = new QTcpSocket(this);
-
+//    socket->setProperty("username",userName);
 
     ui->lineEdit->setEnabled(false);
 
@@ -22,10 +22,8 @@ void ChatDialog::sendToServer(QString msg)
 {
     data.clear();
     QDataStream out(&data, QIODevice::WriteOnly);
-    QString current_time = QTime::currentTime().toString();
-    QString full_message = current_time + "(" + userName +  ") : " + msg;
-    out << full_message;
-    qDebug() << current_time << "("<< userName << ") : " << msg;
+    QString full_message = QTime::currentTime().toString() + "(" + userName +  ") : " + msg;
+    out << full_message << userName;
     socket->write(data);
     ui->lineEdit->clear();
 }
@@ -36,13 +34,24 @@ void ChatDialog::slotReadyRead()
     in.setVersion(QDataStream::Qt_6_2);
     if(in.status() == QDataStream::Ok)
     {
-        QString str;
-        in >> str;
-        ui->textBrowser->append(str);
+        QString message;
+        QString user;
+        in >> message;
+        in >> user;
+        ui->textBrowser->append(message);
+        ui->listWidget_online->addItem(user);
     }
     else
     {
         ui->textBrowser->append("datastream readyread error");
+    }
+    if (socket->state() == QAbstractSocket::UnconnectedState)
+    {
+        // Удаляем сокет из вектора сокетов
+        socket_vector.removeOne(socket);
+
+        // Удаляем объект сокета
+        socket->deleteLater();
     }
 
 }
@@ -71,13 +80,27 @@ ChatDialog::~ChatDialog()
 
 void ChatDialog::on_pushButton_send_clicked()
 {
-    sendToServer(ui->lineEdit->text());
+    QString message = ui->lineEdit->text();
+    if(message.isEmpty())
+    {
+        QMessageBox::warning(this, "Error!", "The message is empty");
+        return;
+    }
+    else
+        sendToServer(message);
 }
 
 
 
 void ChatDialog::on_lineEdit_returnPressed()
 {
-    sendToServer(ui->lineEdit->text());
+    QString message = ui->lineEdit->text();
+    if(message.isEmpty())
+    {
+        QMessageBox::warning(this, "Error!", "The message is empty");
+        return;
+    }
+    else
+        sendToServer(message);
 }
 

@@ -18,9 +18,12 @@ public:
     void sendToUser(QString message);
     QVector<QTcpSocket*> vector_socket;
     QByteArray data;
+    QString userName;
+
 
 public slots:
     void slotReadyRead();
+    void slotDisconnected();
 
 
     // QTcpServer interface
