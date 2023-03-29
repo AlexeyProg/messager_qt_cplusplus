@@ -3,6 +3,10 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+
+#include "registrationform.h"
 #include "chatdialog.h"
 
 QT_BEGIN_NAMESPACE
@@ -18,14 +22,20 @@ public:
     ~MainWindow();
 
     void openChat_login(QString nickname);
+    void connectToDB();
 
 public slots:
 
     void press_login();
+    void registerNewUser();
 
 
 private:
     Ui::MainWindow *ui;
+
+
     ChatDialog *chat ;
+    RegistrationForm *registForm;
+    QSqlDatabase db;
 };
 #endif // MAINWINDOW_H

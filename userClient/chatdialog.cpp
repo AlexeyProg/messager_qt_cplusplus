@@ -39,7 +39,6 @@ void ChatDialog::slotReadyRead()
         in >> message;
         in >> user;
         ui->textBrowser->append(message);
-        ui->listWidget_online->addItem(user);
     }
     else
     {
@@ -62,7 +61,6 @@ void ChatDialog::connectToServer()
     if(socket->waitForConnected(1000))
     {
         QString userConnected = userName + " connected to chat";
-//        ui->textBrowser->append(userConnected);
         sendToServer(userConnected);
         ui->pushButton_connect->hide();
         ui->lineEdit->setEnabled(true);
@@ -95,12 +93,6 @@ void ChatDialog::on_pushButton_send_clicked()
 void ChatDialog::on_lineEdit_returnPressed()
 {
     QString message = ui->lineEdit->text();
-    if(message.isEmpty())
-    {
-        QMessageBox::warning(this, "Error!", "The message is empty");
-        return;
-    }
-    else
-        sendToServer(message);
+    sendToServer(message);
 }
 
