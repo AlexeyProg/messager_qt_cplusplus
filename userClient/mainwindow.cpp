@@ -30,18 +30,18 @@ void MainWindow::openChat_login(QString nickname)
 
 void MainWindow::connectToDB()
 {
-    db = QSqlDatabase::addDatabase("QPSQL");
-    db.setDatabaseName("messager_db");
-    db.setPassword("");
-    db.setPort(5432);
-    bool ok = db.open();
-    if(!ok)
-    {
-        qDebug() << " Some problems with connection to Database";
-        qDebug() << db.lastError();
-    }
-    else
-        qDebug() << "Connection success";
+//    db = QSqlDatabase::addDatabase("QPSQL");
+//    db.setDatabaseName("messager_db");
+//    db.setPassword("");
+//    db.setPort(5432);
+//    bool ok = db.open();
+//    if(!ok)
+//    {
+//        qDebug() << " Some problems with connection to Database";
+//        qDebug() << db.lastError();
+//    }
+//    else
+//        qDebug() << "Connection success";
 
 }
 
