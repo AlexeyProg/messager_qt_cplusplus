@@ -23,7 +23,11 @@
      </widget>
     </item>
     <item row="3" column="0">
-     <widget class="QLineEdit" name="lineEdit_password"/>
+     <widget class="QLineEdit" name="lineEdit_password">
+      <property name="placeholderText">
+       <string>Password</string>
+      </property>
+     </widget>
     </item>
     <item row="0" column="0">
      <widget class="QPushButton" name="pushButton_register">

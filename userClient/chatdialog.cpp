@@ -2,14 +2,14 @@
 #include "ui_chatdialog.h"
 
 ChatDialog::ChatDialog(QString nickname, QWidget *parent) :
-    QDialog(parent),
+    QDialog(parent),userName(nickname),
     ui(new Ui::ChatDialog)
 {
     ui->setupUi(this);
     this->setWindowTitle("Messager");
-    userName = nickname;
+//    userName = nickname;
+    online_users_vector.push_back(userName);
     socket = new QTcpSocket(this);
-//    socket->setProperty("username",userName);
 
     ui->lineEdit->setEnabled(false);
 
@@ -23,7 +23,7 @@ void ChatDialog::sendToServer(QString msg)
     data.clear();
     QDataStream out(&data, QIODevice::WriteOnly);
     QString full_message = QTime::currentTime().toString() + "(" + userName +  ") : " + msg;
-    out << full_message << userName;
+    out << full_message;
     socket->write(data);
     ui->lineEdit->clear();
 }
@@ -35,9 +35,9 @@ void ChatDialog::slotReadyRead()
     if(in.status() == QDataStream::Ok)
     {
         QString message;
-        QString user;
+//        QString user;
         in >> message;
-        in >> user;
+//        in >> user;
         ui->textBrowser->append(message);
     }
     else
@@ -90,9 +90,9 @@ void ChatDialog::on_pushButton_send_clicked()
 
 
 
-void ChatDialog::on_lineEdit_returnPressed()
-{
-    QString message = ui->lineEdit->text();
-    sendToServer(message);
-}
+//void ChatDialog::on_lineEdit_returnPressed()
+//{
+//    QString message = ui->lineEdit->text();
+//    sendToServer(message);
+//}
 

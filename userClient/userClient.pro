@@ -15,16 +15,16 @@ QT_DEBUG_PLUGINS = 1
 SOURCES += \
     chatdialog.cpp \
     database/dbexporter.cpp \
+    database/dbimporter.cpp \
     main.cpp \
     mainwindow.cpp \
-    personclass.cpp \
     registrationform.cpp
 
 HEADERS += \
     chatdialog.h \
     database/dbexporter.h \
+    database/dbimporter.h \
     mainwindow.h \
-    personclass.h \
     registrationform.h
 
 FORMS += \

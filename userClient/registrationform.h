@@ -2,7 +2,6 @@
 #define REGISTRATIONFORM_H
 
 #include <QWidget>
-#include "personclass.h"
 #include <memory>
 #include "database/dbexporter.h"
 

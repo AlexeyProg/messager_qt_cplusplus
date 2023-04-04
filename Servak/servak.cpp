@@ -13,7 +13,7 @@ void Servak::sendToUser(QString message)
     data.clear();
     QDataStream out(&data, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_6_2);
-    out << message << userName;
+    out << message;
     for(QTcpSocket* item : vector_socket)
     {
         item->write(data);
@@ -28,7 +28,8 @@ void Servak::slotReadyRead()
     if(in.status() == QDataStream::Ok)
     {
         QString message;
-        in >> message >> userName;
+        in >> message;
+        qDebug() << message;
         sendToUser(message);
     }
     else
@@ -45,7 +46,6 @@ void Servak::incomingConnection(qintptr handle)
         connect(socket, SIGNAL(disconnected()), SLOT(slotDisconnected()));
         vector_socket.push_back(socket);
         qDebug() << " New connection! Socket Descriptor is " << handle;
-//        QString user = socket->property("username").toString();
     }
     else
         delete socket;

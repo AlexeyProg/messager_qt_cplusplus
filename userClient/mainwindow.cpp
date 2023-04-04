@@ -10,8 +10,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    this->setWindowTitle("Login page");
     connect(ui->pushButton_login, SIGNAL(clicked()), SLOT(press_login()));
-    connectToDB();
+//    connectToDB();
     connect(ui->pushButton_register, SIGNAL(clicked()), SLOT(registerNewUser()));
 
 }
@@ -28,27 +29,32 @@ void MainWindow::openChat_login(QString nickname)
     chat->exec();
 }
 
-void MainWindow::connectToDB()
+bool MainWindow::checkUserInDB(QString username, QString password)
 {
-//    db = QSqlDatabase::addDatabase("QPSQL");
-//    db.setDatabaseName("messager_db");
-//    db.setPassword("");
-//    db.setPort(5432);
-//    bool ok = db.open();
-//    if(!ok)
-//    {
-//        qDebug() << " Some problems with connection to Database";
-//        qDebug() << db.lastError();
-//    }
-//    else
-//        qDebug() << "Connection success";
-
+    importer = new DBImporter();
+    importer->getList();
+    QVector<QPair<QString,QString>> v = importer->vector_registered;
+    for(const auto &item : v)
+    {
+        if(item.first == username && item.second == password)
+        {
+            qDebug() << "Logging in ...";
+            openChat_login(username);
+            return true;
+        }
+    }
+    return false;
 }
 
 void MainWindow::press_login()
 {
-    QString username = ui->lineEdit_nick->text();
-    openChat_login(username);
+    QString cur_username = ui->lineEdit_nick->text();
+    QString user_pass = ui->lineEdit_password->text();
+    bool logging_in = checkUserInDB(cur_username, user_pass);
+    if(!logging_in)
+        QMessageBox::warning(this,"Unknown user","Error!");
+
+//    openChat_login(cur_username);
 }
 
 void MainWindow::registerNewUser()

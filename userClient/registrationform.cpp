@@ -29,16 +29,20 @@ void RegistrationForm::saveInfo()
     if(mPass != ui->lineEdit_confirm_pass->text())
     {
         QMessageBox::warning(this, "Error!", "Your password is not confirmed!");
+        ui->lineEdit_confirm_pass->setStyleSheet("background-color: rgb(255, 65, 56);");
+        ui->lineEdit_pass->setStyleSheet("background-color: rgb(255, 65, 56);");
         return;
     }
     DBExporter exporter;
     bool result = exporter.exportInfo(mUsername, mPass, mAge);
     if (result)
+    {
         QMessageBox::information(this,"Success!","You were registered!");
+        this->close();
+    }
     else
+    {
+        ui->lineEdit_nickname->setStyleSheet("background-color: rgb(255, 65, 56);");
         QMessageBox::warning(this, "Report", "This login is already taken");
-
-   // PersonClass *newPerson = new PersonClass(mUsername,mPass, mAge);
-    //std::shared_ptr<PersonClass> newUser = std::make_shared<PersonClass>(mUsername,mPass,mAge);
-
+    }
 }

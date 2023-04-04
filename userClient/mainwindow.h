@@ -8,6 +8,7 @@
 
 #include "registrationform.h"
 #include "chatdialog.h"
+#include "database/dbimporter.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,7 +23,7 @@ public:
     ~MainWindow();
 
     void openChat_login(QString nickname);
-    void connectToDB();
+    bool checkUserInDB(QString username, QString password);
 
 public slots:
 
@@ -36,6 +37,7 @@ private:
 
     ChatDialog *chat ;
     RegistrationForm *registForm;
+    DBImporter *importer;
     QSqlDatabase db;
 };
 #endif // MAINWINDOW_H

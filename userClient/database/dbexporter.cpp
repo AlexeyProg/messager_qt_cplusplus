@@ -36,6 +36,7 @@ bool DBExporter::exportInfo(QString name, QString pass,int age)
         if(query.exec(request))
         {
             qDebug() << "Succesful create new note in Database";
+            closeConnection();
         }
         else
         {
@@ -46,6 +47,11 @@ bool DBExporter::exportInfo(QString name, QString pass,int age)
     else
         return false;
     return true;
+}
+
+void DBExporter::closeConnection()
+{
+    db.close();
 }
 
 bool DBExporter::checkDuplicates(QString name)

@@ -10,6 +10,7 @@ public:
     DBExporter();
     void connectToDB();
     bool exportInfo(QString name, QString pass, int age);
+    void closeConnection();
 
 private:
     QSqlDatabase db;

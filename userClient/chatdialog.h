@@ -34,11 +34,12 @@ public slots:
 private slots:
     void on_pushButton_send_clicked();
 
-    void on_lineEdit_returnPressed();
+//    void on_lineEdit_returnPressed();
 
 private:
     QString userName;
     QByteArray nickData;
+    QVector<QString> online_users_vector;
 
     Ui::ChatDialog *ui;
 };
